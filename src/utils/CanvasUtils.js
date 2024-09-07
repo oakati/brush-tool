@@ -1,3 +1,7 @@
+import { CircleDrawer } from '../utils/ShapeDrawer';
+
+const shapeDrawer = new CircleDrawer();
+
 export const initCanvas = (canvas, imageSrc) => {
     const context = canvas.getContext('2d');
     const img = new Image();
@@ -16,6 +20,7 @@ export const initCanvas = (canvas, imageSrc) => {
     const y = event.clientY - rect.top;
   
     context.fillStyle = brushColor;
-    context.fillRect(x, y, 10, 10); // Example brush size
+    shapeDrawer.drawShape({ x, y }, context, brushColor);
+
   };
   
