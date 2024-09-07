@@ -1,14 +1,18 @@
+// BrushTool.js
 import React, { useState } from 'react';
+import Logger from '../utils/Logger';
 
 const BrushTool = ({ onActivate, onDeactivate }) => {
   const [active, setActive] = useState(false);
 
   const handleActivate = () => {
+    Logger.info('Activating brush tool');
     setActive(true);
     onActivate();
   };
 
   const handleDeactivate = () => {
+    Logger.info('Deactivating brush tool');
     setActive(false);
     onDeactivate();
   };

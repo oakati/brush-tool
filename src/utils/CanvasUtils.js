@@ -1,4 +1,6 @@
+// CanvasUtils.js
 import { CircleDrawer } from '../utils/ShapeDrawer';
+import Logger from '../utils/Logger';
 
 const shapeDrawer = new CircleDrawer();
 
@@ -9,18 +11,20 @@ export const initCanvas = (canvas, imageSrc) => {
   
     img.onload = () => {
       context.drawImage(img, 0, 0, canvas.width, canvas.height);
+      //Logger.info('Image loaded and drawn on canvas');
     };
   };
   
-  export const drawOnCanvas = (event, canvas, context, isBrushActive, brushColor) => {
+export const drawOnCanvas = (event, canvas, context, isBrushActive, brushColor) => {
     if (!isBrushActive) return;
   
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-  
-    context.fillStyle = brushColor;
-    shapeDrawer.drawShape({ x, y }, context, brushColor);
 
-  };
+    Logger.debug('Drawing on canvas', { x, y, brushColor });
+    context.save();
+    shapeDrawer.drawShape({ x, y }, context, brushColor);
+    context.restore();
+};
   

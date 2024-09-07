@@ -1,3 +1,4 @@
+// ControlPanel.js
 import React from 'react';
 import BrushTool from './BrushTool';
 import SaveButton from './SaveButton';

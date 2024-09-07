@@ -3,31 +3,30 @@ import CanvasComponent from './components/CanvasComponent';
 import ControlPanel from './components/ControlPanel';
 import { drawOnCanvas } from './utils/CanvasUtils';
 import { saveBrushDataToJson } from './services/BrushDataService';
+import Logger from './utils/Logger';
 
 const App = () => {
   const [isBrushActive, setBrushActive] = useState(false);
   const brushStrokes = useRef([]);
 
   const handleActivateBrush = () => {
+    Logger.info('Brush activated');
     setBrushActive(true);
   };
 
   const handleDeactivateBrush = () => {
+    Logger.info('Brush deactivated');
     setBrushActive(false);
   };
 
   const handleDraw = (event, canvas, context) => {
+    Logger.debug('Drawing on canvas', { event, canvas, context });
     const brushColor = event.button === 0 ? 'green' : 'red'; // Left-click: green, Right-click: red
     drawOnCanvas(event, canvas, context, isBrushActive, brushColor);
-
-    brushStrokes.current.push({
-      x: event.clientX,
-      y: event.clientY,
-      color: brushColor,
-    });
   };
 
   const handleSave = () => {
+    Logger.info('Saving brush data');
     saveBrushDataToJson(brushStrokes.current);
   };
 
