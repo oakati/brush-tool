@@ -6,6 +6,7 @@ const shapeDrawer = new CircleDrawer();
 
 export const initCanvas = ( canvas, imageSrc ) =>
 {
+    //Logger.info('Canvas initialized with image', imageSrc);
     const context = canvas.getContext( '2d' );
     const img = new Image();
     img.src = imageSrc;
@@ -25,7 +26,7 @@ export const drawOnCanvas = ( event, canvas, context, isBrushActive, brushColor 
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    Logger.debug( 'Drawing on canvas', { x, y, brushColor } );
+    console.debug( 'Drawing on canvas', { x, y, brushColor } );
     context.save();
     shapeDrawer.drawShape( { x, y }, context, brushColor );
     context.restore();

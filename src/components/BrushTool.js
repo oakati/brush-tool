@@ -8,14 +8,14 @@ const BrushTool = ( { onActivate, onDeactivate } ) =>
 
     const handleActivate = () =>
     {
-        Logger.info( 'Activating brush tool' );
+        console.info( 'Activating brush tool' );
         setActive( true );
         onActivate();
     };
 
     const handleDeactivate = () =>
     {
-        Logger.info( 'Deactivating brush tool' );
+        console.info( 'Deactivating brush tool' );
         setActive( false );
         onDeactivate();
     };

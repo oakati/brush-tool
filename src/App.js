@@ -12,26 +12,26 @@ const App = () =>
 
     const handleActivateBrush = () =>
     {
-        Logger.info( 'Brush activated' );
+        console.info( 'Brush activated' );
         setBrushActive( true );
     };
 
     const handleDeactivateBrush = () =>
     {
-        Logger.info( 'Brush deactivated' );
+        console.info( 'Brush deactivated' );
         setBrushActive( false );
     };
 
     const handleDraw = ( event, canvas, context ) =>
     {
-        Logger.debug( 'Drawing on canvas', { event, canvas, context } );
-        const brushColor = event.button === 0 ? 'green' : 'red'; // Left-click: green, Right-click: red
+        console.debug( 'Drawing on canvas', { event, canvas, context } );
+        const brushColor = event.buttons === 1 ? 'green' : 'red'; // 1: green, 0: red
         drawOnCanvas( event, canvas, context, isBrushActive, brushColor );
     };
 
     const handleSave = () =>
     {
-        Logger.info( 'Saving brush data' );
+        console.info( 'Saving brush data' );
         saveBrushDataToJson( brushStrokes.current );
     };
 

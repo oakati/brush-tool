@@ -3,7 +3,7 @@ import Logger from '../utils/Logger';
 
 export const processBrushData = ( brushStrokes ) =>
 {
-    Logger.debug( 'Processing brush data', brushStrokes );
+    console.debug( 'Processing brush data', brushStrokes );
     return brushStrokes.map( stroke => ( {
         x: stroke.x,
         y: stroke.y,
@@ -13,7 +13,7 @@ export const processBrushData = ( brushStrokes ) =>
 
 export const saveBrushDataToJson = ( brushStrokes ) =>
 {
-    Logger.info( 'Saving brush data to JSON' );
+    console.info( 'Saving brush data to JSON' );
     const processedData = processBrushData( brushStrokes );
     const jsonData = {
         type: 'brush',
