@@ -22,10 +22,9 @@ const App = () =>
         setBrushActive( false );
     };
 
-    const handleDraw = ( event, canvas, context ) =>
+    const handleDraw = ( event, canvas, context, brushColor ) =>
     {
         console.debug( 'Drawing on canvas', { event, canvas, context } );
-        const brushColor = event.buttons === 1 ? 'green' : 'red'; // 1: green, 0: red
         drawOnCanvas( event, canvas, context, isBrushActive, brushColor );
     };
 

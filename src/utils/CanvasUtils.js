@@ -29,5 +29,15 @@ export const drawOnCanvas = ( event, canvas, context, isBrushActive, brushColor 
     console.debug( 'Drawing on canvas', { x, y, brushColor } );
     context.save();
     shapeDrawer.drawShape( { x, y }, context, brushColor );
+
+    if ( 'mouseup' === event.type )
+    {
+        shapeDrawer.previousPoint = null;
+    }
+    else
+    {
+        shapeDrawer.previousPoint = { x, y };
+    }
+
     context.restore();
 };
