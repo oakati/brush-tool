@@ -18,7 +18,7 @@ export const initCanvas = ( canvas, imageSrc ) =>
     };
 };
 
-export const drawOnCanvas = ( event, canvas, context, isBrushActive, brushColor ) =>
+export const drawOnCanvas = ( event, canvas, context, isBrushActive, brushColor, setBrushStrokes ) =>
 {
     if ( !isBrushActive ) return;
 
@@ -27,17 +27,25 @@ export const drawOnCanvas = ( event, canvas, context, isBrushActive, brushColor 
     const y = event.clientY - rect.top;
 
     console.debug( 'Drawing on canvas', { x, y, brushColor } );
+
     context.save();
     shapeDrawer.drawShape( { x, y }, context, brushColor );
 
-    if ( 'mouseup' === event.type )
+    setBrushStrokes( prevStrokes => [
+        ...prevStrokes,
+        { x, y, color: brushColor }
+    ] );
+
+    if ( event.type !== 'mouseup' )
+    {
+
+
+        shapeDrawer.previousPoint = { x, y };
+    } else
     {
         shapeDrawer.previousPoint = null;
-    }
-    else
-    {
-        shapeDrawer.previousPoint = { x, y };
     }
 
     context.restore();
 };
+

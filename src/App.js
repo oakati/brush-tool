@@ -8,7 +8,7 @@ import Logger from './utils/Logger';
 const App = () =>
 {
     const [isBrushActive, setBrushActive] = useState( false );
-    const brushStrokes = useRef( [] );
+    const [brushStrokes, setBrushStrokes] = useState( [] );
 
     const handleActivateBrush = () =>
     {
@@ -25,13 +25,13 @@ const App = () =>
     const handleDraw = ( event, canvas, context, brushColor ) =>
     {
         console.debug( 'Drawing on canvas', { event, canvas, context } );
-        drawOnCanvas( event, canvas, context, isBrushActive, brushColor );
+        drawOnCanvas( event, canvas, context, isBrushActive, brushColor, setBrushStrokes );
     };
 
     const handleSave = () =>
     {
         console.info( 'Saving brush data' );
-        saveBrushDataToJson( brushStrokes.current );
+        saveBrushDataToJson( brushStrokes );
     };
 
     return (
