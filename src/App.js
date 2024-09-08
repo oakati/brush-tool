@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import CanvasComponent from './components/CanvasComponent';
 import ControlPanel from './components/ControlPanel';
 import { drawOnCanvas } from './utils/CanvasUtils';
@@ -9,6 +9,29 @@ const App = () =>
 {
     const [isBrushActive, setBrushActive] = useState( false );
     const [brushStrokes, setBrushStrokes] = useState( [] );
+
+    const handleKeyPress = useCallback((e) => {
+        //console.log('Key pressed:', e.key);
+
+        function handleSave()
+        {
+            console.info( 'Saving brush data' );
+            saveBrushDataToJson( brushStrokes );
+        };
+
+        if (e.key === 's' || e.key === 'S') {
+            handleSave();
+        }
+    }, [brushStrokes]);
+
+    useEffect(() => {
+        //console.info('Adding keydown event listener');
+        document.addEventListener('keydown', handleKeyPress);
+        return () => {
+            //console.info('Removing keydown event listener');
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [handleKeyPress]);
 
     const handleActivateBrush = () =>
     {
@@ -39,12 +62,6 @@ const App = () =>
         drawOnCanvas( event.type, x, y, context, brushColor );
     };
 
-    const handleSave = () =>
-    {
-        console.info( 'Saving brush data' );
-        saveBrushDataToJson( brushStrokes );
-    };
-
     return (
         <div>
             <CanvasComponent
@@ -54,7 +71,6 @@ const App = () =>
             <ControlPanel
                 onActivateBrush={handleActivateBrush}
                 onDeactivateBrush={handleDeactivateBrush}
-                onSave={handleSave}
             />
         </div>
     );
