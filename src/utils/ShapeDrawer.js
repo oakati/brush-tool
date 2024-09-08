@@ -17,6 +17,8 @@ export class CircleDrawer extends ShapeDrawer
 
     drawShape( point, context, color )
     {
+        context.save();
+
         // Çizgi kalınlığını ayarla
         context.lineWidth = 5; // Burada çizgi kalınlığını ayarlıyorsun
 
@@ -36,6 +38,7 @@ export class CircleDrawer extends ShapeDrawer
         context.fillStyle = this.addOpacityToColor( color, 0.1 ); // Opacity ekle
         context.fill();
 
+        context.restore();
     }
 
     addOpacityToColor( color, opacity )

@@ -24,8 +24,19 @@ const App = () =>
 
     const handleDraw = ( event, canvas, context, brushColor ) =>
     {
+        if ( !isBrushActive ) return;
         console.debug( 'Drawing on canvas', { event, canvas, context } );
-        drawOnCanvas( event, canvas, context, isBrushActive, brushColor, setBrushStrokes );
+
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        setBrushStrokes( prevStrokes => [
+            ...prevStrokes,
+            { x, y, color: brushColor }
+        ] );
+
+        drawOnCanvas( event.type, x, y, context, brushColor );
     };
 
     const handleSave = () =>

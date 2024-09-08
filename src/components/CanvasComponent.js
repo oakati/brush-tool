@@ -60,6 +60,10 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
             setIsDragging( false );
         };
 
+        const handleContextmenu = e => {
+            e.preventDefault()
+        }
+
         function onDrawWrapper( event )
         {
             let brushColor = 'black';
@@ -79,12 +83,14 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
         brushLeftCanvas.addEventListener( 'mousedown', handleMouseDown );
         brushLeftCanvas.addEventListener( 'mousemove', handleMouseMove );
         brushLeftCanvas.addEventListener( 'mouseup', handleMouseUp );
+        brushLeftCanvas.addEventListener( 'contextmenu', handleContextmenu );
 
         return () =>
         {
             brushLeftCanvas.removeEventListener( 'mousedown', handleMouseDown );
             brushLeftCanvas.removeEventListener( 'mousemove', handleMouseMove );
             brushLeftCanvas.removeEventListener( 'mouseup', handleMouseUp );
+            brushLeftCanvas.removeEventListener( 'contextmenu', handleContextmenu );
 
         };
     }, [imageSrc, onDraw, isDragging] );
