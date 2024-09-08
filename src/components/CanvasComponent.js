@@ -1,12 +1,10 @@
 // CanvasComponent.js
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { initCanvas } from '../utils/CanvasUtils';
-import Logger from '../utils/Logger';
-import { MouseButtonEnum, MouseButtonGroupState } from "../types/MouseButton.ts"
+import { MouseButtonEnum } from "../types/MouseButton.ts"
 import { BrushMode } from "../types/BrushMode.ts"
 import { AnnotationJSONCreator, Annotation } from '../utils/annotationUtils.js';
 import ClassSelectionPopup from './ClassSelectionPopup';
-import { saveBrushDataToJson } from '../services/BrushDataService.js';
 
 const CanvasComponent = ( { imageSrc, onDraw } ) =>
 {
@@ -24,12 +22,13 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
     {
         //console.log('Key pressed:', e.key);
 
+        /*
         function handleSave()
         {
             console.info( 'Saving brush data' );
             saveBrushDataToJson( brushStrokes );
         };
-
+        */
 
         if ( e.key === 's' || e.key === 'S' )
         {
@@ -39,7 +38,7 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
         {
             setShowClassPopup( true );
         }
-    }, [brushStrokes] );
+    }, [brushStrokes, saveAnnotations] );
 
     useEffect( () =>
     {
@@ -179,17 +178,19 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
         handleSelectClass( newClass );
     };
 
-    const saveAnnotations = () => {
+    function saveAnnotations()
+    {
         //console.log('Saving annotations');
-        if (jsonCreator) {
-            const jsonBlob = new Blob([jsonCreator.generateJSON()], { type: 'application/json' });
-            const url = URL.createObjectURL(jsonBlob);
-            const link = document.createElement('a');
+        if ( jsonCreator )
+        {
+            const jsonBlob = new Blob( [jsonCreator.generateJSON()], { type: 'application/json' } );
+            const url = URL.createObjectURL( jsonBlob );
+            const link = document.createElement( 'a' );
             link.href = url;
-            link.download = `${selectedImage.split('/').pop().split('.')[0]}_annotations.json`;
-            document.body.appendChild(link);
+            link.download = `${selectedImage.split( '/' ).pop().split( '.' )[0]}_annotations.json`;
+            document.body.appendChild( link );
             link.click();
-            document.body.removeChild(link);
+            document.body.removeChild( link );
         }
     };
 

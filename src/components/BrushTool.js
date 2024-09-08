@@ -1,6 +1,5 @@
 // BrushTool.js
 import React, { useState } from 'react';
-import Logger from '../utils/Logger';
 
 const BrushTool = ( { onActivate, onDeactivate } ) =>
 {

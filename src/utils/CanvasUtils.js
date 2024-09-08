@@ -1,6 +1,5 @@
 // CanvasUtils.js
 import { CircleDrawer } from '../utils/ShapeDrawer';
-import Logger from '../utils/Logger';
 
 const shapeDrawer = new CircleDrawer();
 

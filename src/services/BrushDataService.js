@@ -1,6 +1,4 @@
 // BrushDataService.js
-import Logger from '../utils/Logger';
-
 export const saveBrushDataToJson = ( brushStrokes ) =>
 {
     console.info( 'Saving brush data to JSON' );

@@ -1,8 +1,7 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState } from 'react';
 import CanvasComponent from './components/CanvasComponent';
 import ControlPanel from './components/ControlPanel';
 import { drawOnCanvas } from './utils/CanvasUtils';
-import Logger from './utils/Logger';
 
 const App = () =>
 {
