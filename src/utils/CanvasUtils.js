@@ -32,3 +32,10 @@ export const drawOnCanvas = ( eventType, x, y, context, brushColor ) =>
     }
 };
 
+export function clearAllCanvas( context )
+{
+    console.debug( 'Clearing canvas', { context } );
+
+    shapeDrawer.clearCanvas( context );
+}
+

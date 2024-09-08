@@ -46,6 +46,12 @@ export class CircleDrawer extends ShapeDrawer
         const rgbaColor = color.replace( "rgb", "rgba" ).replace( ")", `, ${opacity})` );
         return rgbaColor;
     }
+
+    clearCanvas( context )
+    {
+        context.clearRect( 0, 0, context.canvas.width, context.canvas.height );
+    };
+
 }
 
 export class RectangleDrawer extends ShapeDrawer

@@ -5,19 +5,19 @@ import ToolButtonBase from './ToolButtonBase';
 import { ToolActivity } from '../types/ToolMode.ts';
 
 const ToolButtonBrush = () => (
-  <ToolButtonBase 
-    icon={FaPaintBrush} 
-    label="Brush" 
-    activityType={ToolActivity.Brush} 
-  />
+    <ToolButtonBase
+        icon={FaPaintBrush}
+        label="Brush"
+        activityType={ToolActivity.Brush}
+    />
 );
 
 const ToolButtonPolygon = () => (
-  <ToolButtonBase 
-    icon={BiShapePolygon} 
-    label="Polygon" 
-    activityType={ToolActivity.Polygon} 
-  />
+    <ToolButtonBase
+        icon={BiShapePolygon}
+        label="Polygon"
+        activityType={ToolActivity.Polygon}
+    />
 );
 
 export { ToolButtonBrush, ToolButtonPolygon };

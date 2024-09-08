@@ -2,9 +2,11 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { initCanvas } from '../utils/CanvasUtils';
 import { MouseButtonEnum } from "../types/MouseButton.ts"
-import { BrushMode } from "../types/ToolMode.ts"
+import { BrushMode, ToolActivity } from "../types/ToolMode.ts"
 import { AnnotationJSONCreator, Annotation } from '../utils/annotationUtils.js';
 import ClassSelectionPopup from './ClassSelectionPopup';
+import { useToolContext } from './ToolContext.js';
+import { clearAllCanvas } from '../utils/CanvasUtils';
 
 const CanvasComponent = ( { imageSrc, onDraw } ) =>
 {
@@ -17,6 +19,7 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
     const [brushStrokes, setBrushStrokes] = useState( [] );
     const [showClassPopup, setShowClassPopup] = useState( false );
     const [classes, setClasses] = useState( [] );
+    const { toolActivity } = useToolContext();
 
     const handleKeyPress = useCallback( ( e ) =>
     {
@@ -38,7 +41,15 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
         {
             setShowClassPopup( true );
         }
-    }, [brushStrokes, saveAnnotations] );
+    }, [saveAnnotations] );
+
+    useEffect( () =>
+    {
+        const brushCanvas = brushCanvasRef.current;
+        const brushContext = brushCanvas.getContext( '2d' );
+        clearAllCanvas( brushContext );
+        setBrushStrokes( [] );
+    }, [toolActivity] );
 
     useEffect( () =>
     {
@@ -66,15 +77,15 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
     useEffect( () =>
     {
         const imageCanvas = imageCanvasRef.current;
-        const brushLeftCanvas = brushCanvasRef.current;
+        const brushCanvas = brushCanvasRef.current;
 
-        if ( !imageCanvas || !brushLeftCanvas )
+        if ( !imageCanvas || !brushCanvas )
         {
             console.error( "One or more canvas refs are null" );
             return;
         }
 
-        const brushLeftContext = brushLeftCanvas.getContext( '2d' );
+        const brushContext = brushCanvas.getContext( '2d' );
 
         initCanvas( imageCanvas, imageSrc );
         setSelectedImage( "lena" );
@@ -92,14 +103,14 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
                 setLastBrushMode( BrushMode.REMOVE );
             }
 
-            //onDrawWrapper( event );
+            onDrawWrapper( event );
 
             setIsDragging( true );
         };
 
         const handleMouseMove = ( event ) =>
         {
-            if ( isDragging )
+            if ( isDragging && ToolActivity.Brush === toolActivity )
             {
                 console.debug( 'Mouse move event while dragging', event );
                 onDrawWrapper( event );
@@ -109,7 +120,10 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
         const handleMouseUp = ( event ) =>
         {
             console.debug( 'Mouse up event' );
-            onDrawWrapper( event );
+            if ( ToolActivity.Brush === toolActivity )
+            {
+                onDrawWrapper( event );
+            }
             setIsDragging( false );
         };
 
@@ -122,16 +136,23 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
         {
             let brushColor = 'black';
 
-            if ( BrushMode.KEEP === lastBrushMode )
+            if ( ToolActivity.Polygon === toolActivity )
             {
                 brushColor = 'green';
             }
-            else if ( BrushMode.REMOVE === lastBrushMode )
+            else if ( ToolActivity.Brush === toolActivity )
             {
-                brushColor = 'red';
+                if ( BrushMode.KEEP === lastBrushMode )
+                {
+                    brushColor = 'green';
+                }
+                else if ( BrushMode.REMOVE === lastBrushMode )
+                {
+                    brushColor = 'red';
+                }
             }
 
-            const rect = brushLeftCanvas.getBoundingClientRect();
+            const rect = brushCanvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
 
@@ -140,20 +161,20 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
                 { x, y, label: 'green' === brushColor ? 1 : 0 }
             ] );
 
-            onDraw( event, x, y, brushLeftContext, brushColor );
+            onDraw( event, x, y, brushContext, brushColor );
         }
 
-        brushLeftCanvas.addEventListener( 'mousedown', handleMouseDown );
-        brushLeftCanvas.addEventListener( 'mousemove', handleMouseMove );
-        brushLeftCanvas.addEventListener( 'mouseup', handleMouseUp );
-        brushLeftCanvas.addEventListener( 'contextmenu', handleContextmenu );
+        brushCanvas.addEventListener( 'mousedown', handleMouseDown );
+        brushCanvas.addEventListener( 'mousemove', handleMouseMove );
+        brushCanvas.addEventListener( 'mouseup', handleMouseUp );
+        brushCanvas.addEventListener( 'contextmenu', handleContextmenu );
 
         return () =>
         {
-            brushLeftCanvas.removeEventListener( 'mousedown', handleMouseDown );
-            brushLeftCanvas.removeEventListener( 'mousemove', handleMouseMove );
-            brushLeftCanvas.removeEventListener( 'mouseup', handleMouseUp );
-            brushLeftCanvas.removeEventListener( 'contextmenu', handleContextmenu );
+            brushCanvas.removeEventListener( 'mousedown', handleMouseDown );
+            brushCanvas.removeEventListener( 'mousemove', handleMouseMove );
+            brushCanvas.removeEventListener( 'mouseup', handleMouseUp );
+            brushCanvas.removeEventListener( 'contextmenu', handleContextmenu );
 
         };
     }, [imageSrc, onDraw, isDragging] );
@@ -163,7 +184,7 @@ const CanvasComponent = ( { imageSrc, onDraw } ) =>
         //console.log('Class selected:', selectedClass);
         if ( jsonCreator )
         {
-            const aiMask = new Annotation( "brushTool", brushStrokes, selectedClass );
+            const aiMask = new Annotation( toolActivity, brushStrokes, selectedClass );
             jsonCreator.addAnnotation( aiMask );
             //console.debug('Updated JSON:', jsonCreator.generateJSON());
         }
