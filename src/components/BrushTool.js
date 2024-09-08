@@ -1,5 +1,8 @@
 // BrushTool.js
 import React, { useState } from 'react';
+import { ToolButtonBrush } from './ToolButtonVariants';
+import { ToolButtonPolygon } from './ToolButtonVariants';
+import { ToolContextProvider } from './ToolContext';
 
 const BrushTool = ( { onActivate, onDeactivate } ) =>
 {
@@ -21,6 +24,10 @@ const BrushTool = ( { onActivate, onDeactivate } ) =>
 
     return (
         <div>
+            <ToolContextProvider>
+                <ToolButtonBrush/>
+                <ToolButtonPolygon/>
+            </ToolContextProvider>
             <button onClick={handleActivate} disabled={active}>
                 Activate Brush
             </button>

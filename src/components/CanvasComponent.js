@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { initCanvas } from '../utils/CanvasUtils';
 import { MouseButtonEnum } from "../types/MouseButton.ts"
-import { BrushMode } from "../types/BrushMode.ts"
+import { BrushMode } from "../types/ToolMode.ts"
 import { AnnotationJSONCreator, Annotation } from '../utils/annotationUtils.js';
 import ClassSelectionPopup from './ClassSelectionPopup';
 
