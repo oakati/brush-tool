@@ -33,7 +33,7 @@ const App = () =>
 
         setBrushStrokes( prevStrokes => [
             ...prevStrokes,
-            { x, y, color: brushColor }
+            { x, y, label: 'green' === brushColor ? 1 : 0 }
         ] );
 
         drawOnCanvas( event.type, x, y, context, brushColor );
